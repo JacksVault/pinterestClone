@@ -21,3 +21,11 @@ async function fetchImages(query: string): Promise<string[]> {
   const data = await response.json();
   return data.results.map((result: any) => result.urls.regular);
 }
+
+//Alternatively you can use this
+/*async function fetchImages(query: string): Promise<string[]> {
+  const response = await fetch(`https://api.unsplash.com/search/photos?query=${query}&per_page=12&client_id=${import.meta.env.VITE_UNSPLASH_API_KEY}`);
+  const data = await response.json();
+  const images = data.results.map((result: any) => result.urls.regular);
+  return images;
+} */
