@@ -1,24 +1,23 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+const searchForm = document.getElementById('search-form')!;
+const searchInput = document.getElementById('search-input') as HTMLInputElement;
+const main = document.querySelector('main')!;
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+searchForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const query = searchInput.value;
+  const images = await fetchImages(query);
+  main.innerHTML = '';
+  images.forEach((imageUrl) => {
+    const imageElement = document.createElement('img');
+    imageElement.src = imageUrl;
+    main.appendChild(imageElement);
+  });
+});
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+async function fetchImages(query: string): Promise<string[]> {
+  const apiKey = ''; // Replace with your API key
+  const apiUrl = `https://api.unsplash.com/search/photos?query=${query}&client_id=${apiKey}`;
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+  return data.results.map((result: any) => result.urls.regular);
+}
